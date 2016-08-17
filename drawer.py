@@ -121,15 +121,22 @@ def main():
     except IndexError:
         raise ValueError("No write to file argument specified")
     
-    # retrieve the input dimensions
-    grid_dim = [int(x) for x in input().strip().split(" ")]  # input dimensions
+    # retrieve the input dimensions from user
+    print("Welcome to the bitmap drawer!")
+    print("What size image are you making (in pixels)?") 
+    grid_dim = [ 
+        int(x) for x in input("Width(w) Height(h)-> " ).strip().split(" ")
+        ]
 
 
     # create starting blank grid
+    print("Creating your grid...")
     grid = grid_draw(grid_dim[0], grid_dim[1], 0, 0, 0)
+    print("...done!")
+    print("When you're done, just hit enter. For help, type \"help\"")
 
     # while loop for user drawing input
-    line = input()
+    line = input("\t-> ")
     while line != "":
         if "point" in line:
             draw = line.strip().split(" ")
@@ -150,11 +157,18 @@ def main():
             draw = line.strip().split(" ")
             grid = draw_circle(int(draw[1]), int(draw[2]), int(draw[3]),
                 int(draw[4]), int(draw[5]), int(draw[6]), grid)
+        
+        elif line == "help":
+            print("Here are the options:")
+            print("\tpoint r g b h-pixel w-pixel")
+            print("\trect r g b h-pixel w-pixel hight width")
+            print("\tline r g b h-start w-start h-end w-end")
+            print("\tcircle r g b h-center w-center radius\n")
 
         else:
             print("NOT A VALID INPUT")
 
-        line = input()
+        line = input("\t-> ")
 
     write_ppm(grid, file, grid_dim)
 
