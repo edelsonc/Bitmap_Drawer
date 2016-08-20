@@ -1,5 +1,12 @@
 #!  /Users/edelsonc/anaconda/bin/python
-"""Bit Map Drawer for ppm style files"""
+"""Bit Map Drawer for ppm style files. The script creates a single grid, and
+then passes it between various drawing functions before writing it to a .ppm
+file. It can be used to draw points, lines, rectangles, and circles. Images can
+then be converted to png via imagemagick or a similar software.
+
+Use:
+    $ python drawer.py foo.ppm
+"""
 from math import sqrt
 from sys import argv
 
@@ -137,40 +144,49 @@ def main():
 
     # while loop for user drawing input
     line = input("\t-> ")
-    while line != "":
-        if "point" in line:
-            draw = line.strip().split(" ")
-            grid = draw_point(int(draw[1]), int(draw[2]), int(draw[3]),
-                int(draw[4]), int(draw[5]), grid)
+    
+    try:
+        while line != "":
+            if "point" in line:
+                draw = line.strip().split(" ")
+                grid = draw_point(int(draw[1]), int(draw[2]), int(draw[3]),
+                    int(draw[4]), int(draw[5]), grid)
 
-        elif "rect" in line:
-            draw = line.strip().split(" ")
-            grid = draw_rectangle(int(draw[1]), int(draw[2]), int(draw[3]),
-                int(draw[4]), int(draw[5]), int(draw[6]), int(draw[7]), grid)
+            elif "rect" in line:
+                draw = line.strip().split(" ")
+                grid = draw_rectangle(int(draw[1]), int(draw[2]), int(draw[3]),
+                    int(draw[4]), int(draw[5]), int(draw[6]), int(draw[7]), grid)
 
-        elif "line" in line:
-            draw = line.strip().split(" ")
-            grid = draw_line(int(draw[1]), int(draw[2]), int(draw[3]),
-                int(draw[4]), int(draw[5]), int(draw[6]), int(draw[7]), grid)
+            elif "line" in line:
+                draw = line.strip().split(" ")
+                grid = draw_line(int(draw[1]), int(draw[2]), int(draw[3]),
+                    int(draw[4]), int(draw[5]), int(draw[6]), int(draw[7]), grid)
 
-        elif "circle" in line:
-            draw = line.strip().split(" ")
-            grid = draw_circle(int(draw[1]), int(draw[2]), int(draw[3]),
-                int(draw[4]), int(draw[5]), int(draw[6]), grid)
-        
-        elif line == "help":
-            print("Here are the options:")
-            print("\tpoint r g b h-pixel w-pixel")
-            print("\trect r g b h-pixel w-pixel hight width")
-            print("\tline r g b h-start w-start h-end w-end")
-            print("\tcircle r g b h-center w-center radius\n")
+            elif "circle" in line:
+                draw = line.strip().split(" ")
+                grid = draw_circle(int(draw[1]), int(draw[2]), int(draw[3]),
+                    int(draw[4]), int(draw[5]), int(draw[6]), grid)
 
-        else:
-            print("NOT A VALID INPUT")
+            elif line == "help":
+                print("Here are the options:")
+                print("\tpoint r g b h-pixel w-pixel")
+                print("\trect r g b h-pixel w-pixel hight width")
+                print("\tline r g b h-start w-start h-end w-end")
+                print("\tcircle r g b h-center w-center radius\n")
+                print("r g b values are max of 255\n")
 
-        line = input("\t-> ")
+            else:
+                print("NOT A VALID INPUT")
 
-    write_ppm(grid, file, grid_dim)
+            line = input("\t-> ")
+    
+    except:
+        print("\nAn error has occured!")
+    
+    finally:
+    # ensures their work up to this point is saved
+        print("\nSaved current work")
+        write_ppm(grid, file, grid_dim)
 
 if __name__ == "__main__":
     main()
